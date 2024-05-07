@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 public class NumberUtilTest {
     @Test
     void testNullToZeroLong() {
+        assertEquals(1L, NumberUtil.nullToZero(1L));
         Long longValue = null;
         assertEquals(0, NumberUtil.nullToZero(longValue));
     }

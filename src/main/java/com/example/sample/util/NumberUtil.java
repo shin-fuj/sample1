@@ -3,7 +3,7 @@ package com.example.sample.util;
 public class NumberUtil {
 
     public static Long nullToZero(Long value) {
-        // TODO: hoge
+        // TODO: hogehoge
         if (value == null) {
             return 0L;
         }

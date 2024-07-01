@@ -1,0 +1,29 @@
+// Javaのコードスニペット
+{
+	"copyright": {
+		"scope": "java",
+		"prefix": "copyright",
+		"body": [
+			"// (c) 2024 XXXXX（あとでちゃんとしたのに替えます）",
+			""
+		],
+		"description": "コピーライト"
+	},
+	"package-info": {
+		"scope": "java",
+		"prefix": "package-info",
+		"body": [
+			"// (c) 2024 XXXXX（あとでちゃんとしたのに替えます）",
+			// ${1:copyright}のようにスニペットの再利用も可能だが、package-infoのスニペットを適用したあとに
+			// copyrightのスニペットの適用を手動で行う必要があり手間となるため、コピーライトを二重定義する
+			"",
+			"/**",
+			" * ${2:パッケージコメント}",
+			" */",
+			"@org.springframework.lang.NonNullApi",
+			"@org.springframework.lang.NonNullFields",
+			"package ${1:パッケージ名};"
+		],
+		"description": "package-infoのひな形"
+	}
+}

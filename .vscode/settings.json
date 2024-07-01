@@ -1,0 +1,40 @@
+{
+    //// Java formatter設定
+    // format定義ファイルのパス指定
+    "java.format.settings.url": "${workspaceFolder}/formatter/style.xml",
+    // ファイル保存時に自動フォーマット適用
+    "editor.formatOnSave": true,
+    //// Java import設定
+    // import順
+    "java.completion.importOrder": [
+        "#",
+        "java",
+        "javax",
+        "jakarta",
+        "org",
+        "com",
+        "jp",
+        "com.example",
+        "jp.co.xxx",
+        ""
+    ],
+    // static importをワイルドカード（import static example.ExampleUtil.*;）とする閾値
+    "java.sources.organizeImports.staticStarThreshold": 1,
+    // ファイル保存時に自動import編成  "java.saveActions.organizeImports": trueでも指定できるが、
+    // ソースアクションでのimport編成と結果が変わってしまうため、editor.codeActionsOnSaveで指定
+    "editor.codeActionsOnSave": {
+        "source.organizeImports": "explicit"
+    },
+    //// CheckStyle設定
+    // CheckStyle定義ファイルのパス指定
+    "java.checkstyle.configuration": "${workspaceFolder}/checkstyle/checks.xml",
+    // CheckStyleプラグインのバージョン
+    "java.checkstyle.version": "10.17.0",
+    //// Java test設定
+    "java.test.config": {
+        "vmargs": [
+            // テスト文字化け対策で標準出力をUTF-8に変更
+            "-Dsun.stdout.encoding=UTF-8"
+        ]
+    },
+}

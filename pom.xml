@@ -12,14 +12,55 @@
 	<artifactId>sample1</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>sample1</name>
-	<description>Demo project for Spring Boot</description>
+
+	<repositories>
+		<repository>
+            <!-- Google Artifact Registryをmvn centralとして利用する設定 -->
+			<id>central</id>
+			<name>Maven Central remote repository</name>
+			<url>artifactregistry://asia-northeast1-maven.pkg.dev/sampleproject-426108/maven-remote</url>
+			<layout>default</layout>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+			<snapshots>
+				<enabled>true</enabled>
+			</snapshots>
+		</repository>
+	</repositories>
+
 	<properties>
 		<java.version>21</java.version>
-		<sonar.projectKey>shin-fuj_sample1</sonar.projectKey>
-		<sonar.organization>shin-fuj</sonar.organization>
-		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<maven.compiler.source>${java.version}</maven.compiler.source>
+		<maven.compiler.target>${java.version}</maven.compiler.target>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<!-- library versions -->
+		<lib.lombok.version>1.18.30</lib.lombok.version>
+
+		<!-- maven plugin versions -->
+		<plugin.maven-compiler.version>3.11.0</plugin.maven-compiler.version>
+		<plugin.maven-checkstyle.version>3.3.1</plugin.maven-checkstyle.version>
+		<plugin.maven-jacoco.version>0.8.12</plugin.maven-jacoco.version>
+
+		<!-- build tool versions -->
+		<tool.checkstyle.version>10.17.0</tool.checkstyle.version>
+		<tool.error-prone.version>2.27.1</tool.error-prone.version>
+		<tool.nullaway.version>0.10.26</tool.nullaway.version>
+
+		<!-- NullAway settings -->
+		<!-- NullAwayの対象とするパッケージ。指定パッケージ以下サブパッケージ含めチェック対象とする。 -->
+		<nullaway.target.package>com.example</nullaway.target.package>
+		<!-- NullAwayで問題が検出された際の通知レベル。ERROR、WARN、OFFから設定。原則ERRORとする。 -->
+		<nullaway.check.severity>ERROR</nullaway.check.severity>
+
+		<!--SonarQube start-->
+		<sonar.projectKey>shin-fuj_sample1_643f29bc-3fa2-4303-a526-b06851df3a2f</sonar.projectKey>
+		<sonar.projectName>sample1</sonar.projectName>
+		<sonar.host.url>http://http://192.168.0.13:9000</sonar.host.url>
+		<!--SonarQube end-->
 		<sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-		<sonar.java.spotbugs.reportPaths>${project.basedir}/target/spotbugsXml.xml</sonar.java.spotbugs.reportPaths>
 		<sonar.java.checkstyle.reportPaths>${project.basedir}/target/checkstyle-result.xml</sonar.java.checkstyle.reportPaths>
 	</properties>
 	<dependencies>
@@ -41,6 +82,14 @@
 	</dependencies>
 
 	<build>
+        <!-- Google Artifact Registryを利用するための設定 -->
+		<extensions>
+			<extension>
+				<groupId>com.google.cloud.artifactregistry</groupId>
+				<artifactId>artifactregistry-maven-wagon</artifactId>
+				<version>2.2.2</version>
+			</extension>
+		</extensions>
 		<plugins>
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
@@ -54,125 +103,85 @@
 					</excludes>
 				</configuration>
 			</plugin>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.12</version>
-                <executions>
-                    <execution>
-                        <id>prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>post-unit-test</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                        <configuration>
-                            <!-- Sets the path to the file which contains the execution data. -->
-                            <dataFile>target/jacoco.exec</dataFile>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.3.1</version>
-                <configuration>
-					<configLocation>/checkstyle/checks.xml</configLocation>
-                    <failOnViolation>false</failOnViolation>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>check</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-				<dependencies>
-					<dependency>
-						<groupId>com.puppycrawl.tools</groupId>
-						<artifactId>checkstyle</artifactId>
-						<version>10.17.0</version>
-					</dependency>
-				</dependencies>
-            </plugin>
-            <plugin>
-                <groupId>com.github.spotbugs</groupId>
-                <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.8.4.0</version>
-                <configuration>
-                    <xmlOutput>true</xmlOutput>
-                    <failOnError>false</failOnError>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>check</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-			<!--
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.11.0</version>
+				<version>${plugin.maven-compiler.version}</version>
 				<configuration>
-					<source>21</source>
-					<target>21</target>
-					<encoding>UTF-8</encoding>
+				<parameters>true</parameters>
+					<!-- NullAway setting satrt -->
 					<compilerArgs>
 						<arg>-XDcompilePolicy=simple</arg>
-						<arg>-Xplugin:ErrorProne -XepOpt:NullAway:AnnotatedPackages=com.example -Xep:NullAway:ERROR</arg>
+						<!-- -XepDisableAllChecksによりすべてのチェックを無効化しNullAwayのみチェックするように定義 -->
+						<arg>-Xplugin:ErrorProne -XepDisableAllChecks -XepOpt:NullAway:AnnotatedPackages=${nullaway.target.package} -Xep:NullAway:${nullaway.check.severity}</arg>
 					</compilerArgs>
 					<annotationProcessorPaths>
 						<path>
 							<groupId>com.google.errorprone</groupId>
 							<artifactId>error_prone_core</artifactId>
-							<version>2.27.1</version>
+							<version>${tool.error-prone.version}</version>
 						</path>
 						<path>
 							<groupId>com.uber.nullaway</groupId>
 							<artifactId>nullaway</artifactId>
-							<version>0.10.26</version>
+							<version>${tool.nullaway.version}</version>
+						</path>
+						<!-- ErrorProneで静的解析する際にlombokのアノテーションで自動生成されるコードを解決するための設定 -->
+						<path>
+							<groupId>org.projectlombok</groupId>
+							<artifactId>lombok</artifactId>
+							<version>${lib.lombok.version}</version>
 						</path>
 					</annotationProcessorPaths>
 				</configuration>
 			</plugin>
-			-->
-		</plugins>
-	</build>
-	<reporting>
-		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-checkstyle-plugin</artifactId>
-				<version>3.3.1</version>
+				<version>${plugin.maven-checkstyle.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>com.puppycrawl.tools</groupId>
+						<artifactId>checkstyle</artifactId>
+						<version>${tool.checkstyle.version}</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<!-- プロジェクトルートからのパス -->
+					<configLocation>/checkstyle/checks.xml</configLocation>
+					<!-- CheckstyleでERRORレベルの検出がされても継続するための設定 -->
+					<failOnViolation>false</failOnViolation>
+				</configuration>
+				<executions>
+					<execution>
+						<id>check</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>check</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 			<plugin>
-				<groupId>com.github.spotbugs</groupId>
-				<artifactId>spotbugs-maven-plugin</artifactId>
-				<version>4.8.4.0</version>
-				<configuration>
-					<xmlOutput>true</xmlOutput>
-				</configuration>
+				<groupId>org.jacoco</groupId>
+				<artifactId>jacoco-maven-plugin</artifactId>
+				<version>${plugin.maven-jacoco.version}</version>
+				<executions>
+					<execution>
+						<id>prepare-agent</id>
+						<goals>
+							<goal>prepare-agent</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>post-unit-test</id>
+						<phase>test</phase>
+						<goals>
+							<goal>report</goal>
+						</goals>
+					</execution>
+				</executions>
 			</plugin>
 		</plugins>
-	</reporting>
+	</build>
 </project>

@@ -55,11 +55,11 @@
 		<!-- NullAwayで問題が検出された際の通知レベル。ERROR、WARN、OFFから設定。原則ERRORとする。 -->
 		<nullaway.check.severity>ERROR</nullaway.check.severity>
 
-		<!--SonarQube start-->
-		<sonar.projectKey>shin-fuj_sample1_643f29bc-3fa2-4303-a526-b06851df3a2f</sonar.projectKey>
-		<sonar.projectName>sample1</sonar.projectName>
-		<sonar.host.url>http://http://192.168.0.13:9000</sonar.host.url>
-		<!--SonarQube end-->
+		<!--SonarCloud start-->
+		<sonar.projectKey>shin-fuj_sample1</sonar.projectKey>
+		<sonar.organization>shin-fuj</sonar.organization>
+		<sonar.host.url>https://sonarcloud.io</sonar.host.url>
+		<!--SonarCloud end-->
 		<sonar.coverage.jacoco.xmlReportPaths>${project.basedir}/target/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
 		<sonar.java.checkstyle.reportPaths>${project.basedir}/target/checkstyle-result.xml</sonar.java.checkstyle.reportPaths>
 	</properties>
